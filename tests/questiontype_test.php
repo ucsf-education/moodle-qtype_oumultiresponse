@@ -55,6 +55,13 @@ final class questiontype_test extends \question_testcase {
         $this->qtype = new qtype_oumultiresponse();
     }
 
+    private function xmlize(string $xml): array {
+        if (class_exists(\core\xml_parser::class)) {
+            return (new \core\xml_parser())->parse($xml);
+        }
+        return xmlize($xml);
+    }
+
     #[\Override]
     public function assert_same_xml($expectedxml, $xml): void {
         $this->assertEquals(str_replace("\r\n", "\n", $expectedxml),
@@ -181,7 +188,7 @@ final class questiontype_test extends \question_testcase {
       <options>1</options>
     </hint>
   </question>';
-        $xmldata = xmlize($xml);
+        $xmldata = $this->xmlize($xml);
 
         $importer = new \qformat_xml();
         $q = $importer->try_importing_using_qtypes(
@@ -318,7 +325,7 @@ final class questiontype_test extends \question_testcase {
       </hintcontent>
     </hint>
   </question>';
-        $xmldata = xmlize($xml);
+        $xmldata = $this->xmlize($xml);
 
         $importer = new \qformat_xml();
         $q = $importer->try_importing_using_qtypes(
