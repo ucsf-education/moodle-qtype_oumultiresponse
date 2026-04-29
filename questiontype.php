@@ -17,9 +17,9 @@
 /**
  * OU multiple response question type class.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2008 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2008 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/question/engine/lib.php');
 require_once($CFG->dirroot . '/question/type/multichoice/questiontype.php');
 require_once($CFG->dirroot . '/question/format/xml/format.php');
 
-
+// phpcs:enable PSR1.Classes.ClassDeclaration.MultipleClasses
 /**
  * This questions type is like the standard multiplechoice question type, but
  * with these differences:
@@ -39,11 +39,11 @@ require_once($CFG->dirroot . '/question/format/xml/format.php');
  * 2. The correct answer is just indicated on the editing form by a indicating
  * which choices are correct. There is no complex but flexible scoring system.
  *
- * @copyright  2008 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2008 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_oumultiresponse extends question_type {
-
+class qtype_oumultiresponse extends question_type
+{
     #[\Override]
     public function has_html_answers() {
         return true;
@@ -59,8 +59,12 @@ class qtype_oumultiresponse extends question_type {
     #[\Override]
     public function get_question_options($question) {
         global $DB;
-        $question->options = $DB->get_record('question_oumultiresponse',
-            ['questionid' => $question->id], '*', MUST_EXIST);
+        $question->options = $DB->get_record(
+            'question_oumultiresponse',
+            ['questionid' => $question->id],
+            '*',
+            MUST_EXIST,
+        );
         parent::get_question_options($question);
     }
 
@@ -78,8 +82,11 @@ class qtype_oumultiresponse extends question_type {
         $context = $question->context;
         $result = new stdClass();
 
-        $oldanswers = $DB->get_records('question_answers',
-            ['question' => $question->id], 'id ASC');
+        $oldanswers = $DB->get_records(
+            'question_answers',
+            ['question' => $question->id],
+            'id ASC',
+        );
 
         // The following hack to checks that at least two answers exist.
         $answercount = 0;
@@ -110,12 +117,22 @@ class qtype_oumultiresponse extends question_type {
                 $answer->id = $DB->insert_record('question_answers', $answer);
             }
 
-            $answer->answer = $this->import_or_save_files($answerdata,
-                    $context, 'question', 'answer', $answer->id);
+            $answer->answer = $this->import_or_save_files(
+                $answerdata,
+                $context,
+                'question',
+                'answer',
+                $answer->id,
+            );
             $answer->answerformat = $answerdata['format'];
             $answer->fraction = !empty($question->correctanswer[$key]);
-            $answer->feedback = $this->import_or_save_files($question->feedback[$key],
-                    $context, 'question', 'answerfeedback', $answer->id);
+            $answer->feedback = $this->import_or_save_files(
+                $question->feedback[$key],
+                $context,
+                'question',
+                'answerfeedback',
+                $answer->id,
+            );
             $answer->feedbackformat = $question->feedback[$key]['format'];
 
             $DB->update_record('question_answers', $answer);
@@ -129,8 +146,10 @@ class qtype_oumultiresponse extends question_type {
             $DB->delete_records('question_answers', ['id' => $oldanswer->id]);
         }
 
-        $options = $DB->get_record('question_oumultiresponse',
-            ['questionid' => $question->id]);
+        $options = $DB->get_record(
+            'question_oumultiresponse',
+            ['questionid' => $question->id],
+        );
         if (!$options) {
             $options = new stdClass();
             $options->questionid = $question->id;
@@ -155,8 +174,11 @@ class qtype_oumultiresponse extends question_type {
         global $DB;
         $context = $formdata->context;
 
-        $oldhints = $DB->get_records('question_hints',
-            ['questionid' => $formdata->id], 'id ASC');
+        $oldhints = $DB->get_records(
+            'question_hints',
+            ['questionid' => $formdata->id],
+            'id ASC',
+        );
 
         if (!empty($formdata->hint)) {
             $numhints = max(array_keys($formdata->hint)) + 1;
@@ -197,8 +219,10 @@ class qtype_oumultiresponse extends question_type {
 
             $showchoicefeedback = !empty($formdata->hintshowchoicefeedback[$i]);
 
-            if (empty($formdata->hint[$i]['text']) && empty($clearwrong) &&
-                    empty($shownumcorrect) && empty($showchoicefeedback)) {
+            if (
+                empty($formdata->hint[$i]['text']) && empty($clearwrong)
+                && empty($shownumcorrect) && empty($showchoicefeedback)
+            ) {
                 continue;
             }
 
@@ -211,8 +235,13 @@ class qtype_oumultiresponse extends question_type {
                 $hint->id = $DB->insert_record('question_hints', $hint);
             }
 
-            $hint->hint = $this->import_or_save_files($formdata->hint[$i],
-                    $context, 'question', 'hint', $hint->id);
+            $hint->hint = $this->import_or_save_files(
+                $formdata->hint[$i],
+                $context,
+                'question',
+                'hint',
+                $hint->id,
+            );
             $hint->hintformat = $formdata->hint[$i]['format'];
             if ($withparts) {
                 $hint->clearwrong = $clearwrong;
@@ -281,8 +310,8 @@ class qtype_oumultiresponse extends question_type {
         // student how many of the responses are correct.
         // Amazingly, the forumla for this works out to be
         // # correct choices / total # choices in all cases.
-        return $this->get_num_correct_choices($questiondata) /
-                count($questiondata->options->answers);
+        return $this->get_num_correct_choices($questiondata)
+                / count($questiondata->options->answers);
     }
 
     #[\Override]
@@ -291,15 +320,15 @@ class qtype_oumultiresponse extends question_type {
         $parts = [];
 
         foreach ($questiondata->options->answers as $aid => $answer) {
-            $parts[$aid] = [$aid =>
-                new question_possible_response($answer->answer, $answer->fraction / $numright)];
+            $parts[$aid] = [$aid
+                => new question_possible_response($answer->answer, $answer->fraction / $numright)];
         }
 
         return $parts;
     }
 
     #[\Override]
-    public function import_from_xml($data, $question, qformat_xml $format, $extra=null) {
+    public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
         if (!isset($data['@']['type']) || $data['@']['type'] != 'oumultiresponse') {
             return false;
         }
@@ -308,19 +337,29 @@ class qtype_oumultiresponse extends question_type {
         $question->qtype = 'oumultiresponse';
 
         $question->shuffleanswers = $format->trans_single(
-            $format->getpath($data, ['#', 'shuffleanswers', 0, '#'], 1));
-        $question->answernumbering = $format->getpath($data,
-            ['#', 'answernumbering', 0, '#'], 'abc');
-        $question->showstandardinstruction = $format->getpath($data,
-            ['#', 'showstandardinstruction', 0, '#'], 1);
+            $format->getpath($data, ['#', 'shuffleanswers', 0, '#'], 1),
+        );
+        $question->answernumbering = $format->getpath(
+            $data,
+            ['#', 'answernumbering', 0, '#'],
+            'abc',
+        );
+        $question->showstandardinstruction = $format->getpath(
+            $data,
+            ['#', 'showstandardinstruction', 0, '#'],
+            1,
+        );
 
         $format->import_combined_feedback($question, $data, true);
 
         // Run through the answers.
         $answers = $data['#']['answer'];
         foreach ($answers as $answer) {
-            $ans = $format->import_answer($answer, true,
-                    $format->get_format($question->questiontextformat));
+            $ans = $format->import_answer(
+                $answer,
+                true,
+                $format->get_format($question->questiontextformat),
+            );
             $question->answer[] = $ans->answer;
             $question->correctanswer[] = !empty($ans->fraction);
             $question->feedback[] = $ans->feedback;
@@ -328,13 +367,21 @@ class qtype_oumultiresponse extends question_type {
             // Backwards compatibility.
             if (array_key_exists('correctanswer', $answer['#'])) {
                 $keys = array_keys($question->correctanswer);
-                $question->correctanswer[end($keys)] = $format->getpath($answer,
-                    ['#', 'correctanswer', 0, '#'], 0);
+                $question->correctanswer[end($keys)] = $format->getpath(
+                    $answer,
+                    ['#', 'correctanswer', 0, '#'],
+                    0,
+                );
             }
         }
 
-        $format->import_hints($question, $data, true, true,
-                $format->get_format($question->questiontextformat));
+        $format->import_hints(
+            $question,
+            $data,
+            true,
+            true,
+            $format->get_format($question->questiontextformat),
+        );
 
         // Get extra choicefeedback setting from each hint.
         if (!empty($question->hintoptions)) {
@@ -351,13 +398,16 @@ class qtype_oumultiresponse extends question_type {
         $output = '';
 
         $output .= "    <shuffleanswers>" . $format->get_single(
-                $question->options->shuffleanswers) . "</shuffleanswers>\n";
+            $question->options->shuffleanswers,
+        ) . "</shuffleanswers>\n";
         $output .= "    <answernumbering>{$question->options->answernumbering}</answernumbering>\n";
         $output .= "    <showstandardinstruction>{$question->options->showstandardinstruction}</showstandardinstruction>\n";
 
-        $output .= $format->write_combined_feedback($question->options,
-                                                    $question->id,
-                                                    $question->contextid);
+        $output .= $format->write_combined_feedback(
+            $question->options,
+            $question->id,
+            $question->contextid,
+        );
         $output .= $format->write_answers($question->options->answers);
 
         return $output;
@@ -371,12 +421,27 @@ class qtype_oumultiresponse extends question_type {
         $this->move_files_in_answers($questionid, $oldcontextid, $newcontextid, true);
         $this->move_files_in_hints($questionid, $oldcontextid, $newcontextid);
 
-        $fs->move_area_files_to_new_context($oldcontextid,
-                $newcontextid, 'question', 'correctfeedback', $questionid);
-        $fs->move_area_files_to_new_context($oldcontextid,
-                $newcontextid, 'question', 'partiallycorrectfeedback', $questionid);
-        $fs->move_area_files_to_new_context($oldcontextid,
-                $newcontextid, 'question', 'incorrectfeedback', $questionid);
+        $fs->move_area_files_to_new_context(
+            $oldcontextid,
+            $newcontextid,
+            'question',
+            'correctfeedback',
+            $questionid,
+        );
+        $fs->move_area_files_to_new_context(
+            $oldcontextid,
+            $newcontextid,
+            'question',
+            'partiallycorrectfeedback',
+            $questionid,
+        );
+        $fs->move_area_files_to_new_context(
+            $oldcontextid,
+            $newcontextid,
+            'question',
+            'incorrectfeedback',
+            $questionid,
+        );
     }
 
     #[\Override]
@@ -392,39 +457,56 @@ class qtype_oumultiresponse extends question_type {
     }
 }
 
-
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 /**
  * An extension of {@link question_hint_with_parts} for oumultirespone questions
  * with an extra option for whether to show the feedback for each choice.
  *
- * @copyright  2010 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2010 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_oumultiresponse_hint extends question_hint_with_parts {
-    /** @var bool whether to show the feedback for each choice. */
+class qtype_oumultiresponse_hint extends question_hint_with_parts
+{
+    /**
+     * @var bool whether to show the feedback for each choice.
+     */
     public $showchoicefeedback;
 
     /**
      * Constructor.
-     * @param string $hint The hint text
-     * @param bool $shownumcorrect whether the number of right parts should be shown
-     * @param bool $clearwrong whether the wrong parts should be reset.
-     * @param bool $showchoicefeedback whether to show the feedback for each choice.
+     *
+     * @param string $hint               The hint text
+     * @param bool   $shownumcorrect     whether the number of right parts should be shown
+     * @param bool   $clearwrong         whether the wrong parts should be reset.
+     * @param bool   $showchoicefeedback whether to show the feedback for each choice.
      */
-    public function __construct($id, $hint, $hintformat, $shownumcorrect,
-            $clearwrong, $showchoicefeedback) {
+    public function __construct(
+        $id,
+        $hint,
+        $hintformat,
+        $shownumcorrect,
+        $clearwrong,
+        $showchoicefeedback,
+    ) {
         parent::__construct($id, $hint, $hintformat, $shownumcorrect, $clearwrong);
         $this->showchoicefeedback = $showchoicefeedback;
     }
 
     /**
      * Create a basic hint from a row loaded from the question_hints table in the database.
-     * @param object $row with $row->hint, ->shownumcorrect and ->clearwrong set.
+     *
+     * @param  object $row with $row->hint, ->shownumcorrect and ->clearwrong set.
      * @return question_hint_with_parts
      */
     public static function load_from_record($row) {
-        return new qtype_oumultiresponse_hint($row->id, $row->hint, $row->hintformat,
-                $row->shownumcorrect, $row->clearwrong, !empty($row->options));
+        return new qtype_oumultiresponse_hint(
+            $row->id,
+            $row->hint,
+            $row->hintformat,
+            $row->shownumcorrect,
+            $row->clearwrong,
+            !empty($row->options),
+        );
     }
 
     #[\Override]
@@ -441,3 +523,4 @@ class qtype_oumultiresponse_hint extends question_hint_with_parts {
         }
     }
 }
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses

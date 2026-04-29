@@ -17,10 +17,11 @@
 /**
  * Privacy provider tests.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2021 The Open university
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2021 The Open university
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace qtype_oumultiresponse;
 
 use core_privacy\local\metadata\collection;
@@ -37,12 +38,13 @@ require_once($CFG->dirroot . '/question/type/oumultiresponse/classes/privacy/pro
 /**
  * Privacy provider tests class.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2021 The Open university
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers \qtype_oumultiresponse\privacy\provider
+ * @package   qtype_oumultiresponse
+ * @copyright 2021 The Open university
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers    \qtype_oumultiresponse\privacy\provider
  */
-final class privacy_provider_test extends \core_privacy\tests\provider_testcase {
+final class privacy_provider_test extends \core_privacy\tests\provider_testcase
+{
     // Include the privacy helper which has assertions on it.
 
     public function test_get_metadata(): void {
@@ -62,10 +64,11 @@ final class privacy_provider_test extends \core_privacy\tests\provider_testcase 
 
     /**
      * Test the export_user_preferences given different inputs
+     *
      * @dataProvider user_preference_provider
 
-     * @param string $name The name of the user preference to get/set
-     * @param string $value The value stored in the database
+     * @param string $name     The name of the user preference to get/set
+     * @param string $value    The value stored in the database
      * @param string $expected The expected transformed value
      */
     public function test_export_user_preferences($name, $value, $expected): void {
@@ -94,17 +97,17 @@ final class privacy_provider_test extends \core_privacy\tests\provider_testcase 
      */
     public static function user_preference_provider(): array {
         return [
-                'default mark 2' => ['defaultmark', 2, 2],
-                'penalty 33.33333%' => ['penalty', 0.3333333, '33.33333%'],
-                'shuffle yes' => ['shuffleanswers', 1, 'Yes'],
-                'shuffle no' => ['shuffleanswers', 0, 'No'],
-                'answernumbering abc' => ['answernumbering', 'abc', 'a., b., c., ...'],
-                'answernumbering ABC' => ['answernumbering', 'ABCD', 'A., B., C., ...'],
-                'answernumbering 123' => ['answernumbering', '123', '1., 2., 3., ...'],
-                'answernumbering iii' => ['answernumbering', 'iii', 'i., ii., iii., ...'],
-                'answernumbering III' => ['answernumbering', 'IIII', 'I., II., III., ...'],
-                'show standard instruction yes' => ['showstandardinstruction', 1, 'Yes'],
-                'show standard instruction no' => ['showstandardinstruction', 0, 'No'],
+            'default mark 2' => ['defaultmark', 2, 2],
+            'penalty 33.33333%' => ['penalty', 0.3333333, '33.33333%'],
+            'shuffle yes' => ['shuffleanswers', 1, 'Yes'],
+            'shuffle no' => ['shuffleanswers', 0, 'No'],
+            'answernumbering abc' => ['answernumbering', 'abc', 'a., b., c., ...'],
+            'answernumbering ABC' => ['answernumbering', 'ABCD', 'A., B., C., ...'],
+            'answernumbering 123' => ['answernumbering', '123', '1., 2., 3., ...'],
+            'answernumbering iii' => ['answernumbering', 'iii', 'i., ii., iii., ...'],
+            'answernumbering III' => ['answernumbering', 'IIII', 'I., II., III., ...'],
+            'show standard instruction yes' => ['showstandardinstruction', 1, 'Yes'],
+            'show standard instruction no' => ['showstandardinstruction', 0, 'No'],
         ];
     }
 }

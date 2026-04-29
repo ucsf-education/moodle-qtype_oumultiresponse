@@ -27,6 +27,6 @@
  */
 function qtype_oumultiresponse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     global $CFG;
-    require_once($CFG->libdir . '/questionlib.php');
+    include_once($CFG->libdir . '/questionlib.php');
     question_pluginfile($course, $context, 'qtype_oumultiresponse', $filearea, $args, $forcedownload, $options);
 }

@@ -17,20 +17,20 @@
 /**
  * Restore plugin class for the OU multiple response question type.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
  * restore plugin class that provides the necessary information
  * needed to restore one oumultiresponse qtype plugin.
  *
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class restore_qtype_oumultiresponse_plugin extends restore_qtype_plugin {
-
+class restore_qtype_oumultiresponse_plugin extends restore_qtype_plugin
+{
     /**
      * Returns the paths to be handled by the plugin at question level.
      */
@@ -56,7 +56,7 @@ class restore_qtype_oumultiresponse_plugin extends restore_qtype_plugin {
     public function process_oumultiresponse($data) {
         global $DB;
 
-        $data = (object)$data;
+        $data = (object) $data;
         $oldid = $data->id;
 
         // Detect if the question is created or mapped.
@@ -86,7 +86,8 @@ class restore_qtype_oumultiresponse_plugin extends restore_qtype_plugin {
 
     /**
      * Recode the choice order as stored in the response.
-     * @param string $order the original order.
+     *
+     * @param  string $order the original order.
      * @return string the recoded order.
      */
     protected function recode_choice_order($order) {
@@ -107,8 +108,11 @@ class restore_qtype_oumultiresponse_plugin extends restore_qtype_plugin {
         $contents = [];
 
         $fields = ['correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback'];
-        $contents[] = new restore_decode_content('question_oumultiresponse',
-                $fields, 'question_oumultiresponse');
+        $contents[] = new restore_decode_content(
+            'question_oumultiresponse',
+            $fields,
+            'question_oumultiresponse',
+        );
 
         return $contents;
     }

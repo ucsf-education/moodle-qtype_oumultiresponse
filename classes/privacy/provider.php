@@ -17,10 +17,11 @@
 /**
  * Privacy Subsystem implementation for qtype_oumultiresponse.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2018 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2018 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace qtype_oumultiresponse\privacy;
 
 use core_privacy\local\metadata\collection;
@@ -31,28 +32,30 @@ use core_privacy\local\request\writer;
 /**
  * Privacy Subsystem for qtype_oumultiresponse implementing user_preference_provider.
  *
- * @copyright  2018 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2018 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-        // This component has data.
-        // We need to return default options that have been set a user preferences.
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\user_preference_provider {
-
+    // This component has data.
+    // We need to return default options that have been set a user preferences.
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\user_preference_provider
+{
     /**
      * Returns meta data about this system.
      *
-     * @param collection $collection The initialised collection to add items to.
-     * @return  collection     A listing of user data stored through this system.
+     * @param  collection $collection The initialised collection to add items to.
+     * @return collection     A listing of user data stored through this system.
      */
     public static function get_metadata(collection $collection): collection {
         $collection->add_user_preference('qtype_oumultiresponse_defaultmark', 'privacy:preference:defaultmark');
         $collection->add_user_preference('qtype_oumultiresponse_penalty', 'privacy:preference:penalty');
         $collection->add_user_preference('qtype_oumultiresponse_shuffleanswers', 'privacy:preference:shuffleanswers');
         $collection->add_user_preference('qtype_oumultiresponse_answernumbering', 'privacy:preference:answernumbering');
-        $collection->add_user_preference('qtype_oumultiresponse_showstandardinstruction',
-                'privacy:preference:showstandardinstruction');
+        $collection->add_user_preference(
+            'qtype_oumultiresponse_showstandardinstruction',
+            'privacy:preference:showstandardinstruction',
+        );
         return $collection;
     }
 
@@ -77,8 +80,12 @@ class provider implements
         $preference = get_user_preferences('qtype_oumultiresponse_answernumbering', null, $userid);
         if (null !== $preference) {
             $desc = get_string('privacy:preference:answernumbering', 'qtype_oumultiresponse');
-            writer::export_user_preference('qtype_oumultiresponse', 'answernumbering',
-                    get_string('answernumbering' . $preference, 'qtype_multichoice'), $desc);
+            writer::export_user_preference(
+                'qtype_oumultiresponse',
+                'answernumbering',
+                get_string('answernumbering' . $preference, 'qtype_multichoice'),
+                $desc,
+            );
         }
 
         $preference = get_user_preferences('qtype_oumultiresponse_shuffleanswers', null, $userid);
@@ -90,8 +97,12 @@ class provider implements
         $preference = get_user_preferences("qtype_oumultiresponse_showstandardinstruction", null, $userid);
         if (null !== $preference) {
             $desc = get_string("privacy:preference:showstandardinstruction", 'qtype_oumultiresponse');
-            writer::export_user_preference('qtype_oumultiresponse', 'showstandardinstruction',
-                    transform::yesno($preference), $desc);
+            writer::export_user_preference(
+                'qtype_oumultiresponse',
+                'showstandardinstruction',
+                transform::yesno($preference),
+                $desc,
+            );
         }
     }
 }

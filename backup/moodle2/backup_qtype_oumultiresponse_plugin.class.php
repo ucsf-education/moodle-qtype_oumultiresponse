@@ -17,19 +17,19 @@
 /**
  * Backup plugin for the OU multiple response question type.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
  * Provides the information to backup oumultiresponse questions.
  *
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class backup_qtype_oumultiresponse_plugin extends backup_qtype_plugin {
-
+class backup_qtype_oumultiresponse_plugin extends backup_qtype_plugin
+{
     /**
      * Returns the qtype information to attach to question element.
      */
@@ -49,19 +49,25 @@ class backup_qtype_oumultiresponse_plugin extends backup_qtype_plugin {
         $this->add_question_question_answers($pluginwrapper);
 
         // Now create the qtype own structures.
-        $oumultiresponse = new backup_nested_element('oumultiresponse', ['id'], [
-            'shuffleanswers', 'correctfeedback', 'correctfeedbackformat',
-            'partiallycorrectfeedback', 'partiallycorrectfeedbackformat',
-            'incorrectfeedback', 'incorrectfeedbackformat', 'answernumbering',
-            'shownumcorrect', 'showstandardinstruction',
-        ]);
+        $oumultiresponse = new backup_nested_element(
+            'oumultiresponse',
+            ['id'],
+            [
+                'shuffleanswers', 'correctfeedback', 'correctfeedbackformat',
+                'partiallycorrectfeedback', 'partiallycorrectfeedbackformat',
+                'incorrectfeedback', 'incorrectfeedbackformat', 'answernumbering',
+                'shownumcorrect', 'showstandardinstruction',
+            ],
+        );
 
         // Now the own qtype tree.
         $pluginwrapper->add_child($oumultiresponse);
 
         // Set source to populate the data.
-        $oumultiresponse->set_source_table('question_oumultiresponse',
-            ['questionid' => backup::VAR_PARENTID]);
+        $oumultiresponse->set_source_table(
+            'question_oumultiresponse',
+            ['questionid' => backup::VAR_PARENTID],
+        );
 
         // Don't need to annotate ids nor files.
 

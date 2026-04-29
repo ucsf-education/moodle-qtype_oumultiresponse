@@ -25,7 +25,7 @@
 /**
  * Upgrade code for the OU multi-response question type.
  *
- * @param int $oldversion the version we are upgrading from.
+ * @param  int $oldversion the version we are upgrading from.
  * @return bool true
  */
 function xmldb_qtype_oumultiresponse_upgrade($oldversion) {
@@ -34,7 +34,6 @@ function xmldb_qtype_oumultiresponse_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2020031600) {
-
         // For OUMR sub-questions of combined questions, ensure that the setting in the database
         // matches what the behaviour was (no added answer numbers) before the recent change.
         // This upgrade step really belongs with the commit of 2020-01-02
@@ -44,7 +43,8 @@ function xmldb_qtype_oumultiresponse_upgrade($oldversion) {
         // The config check is because we have already manually applied this fix to some OU server,
         // so we needed a way to stop it running again.
         if (!get_config('qtype_oumultiresponse', 'combined2020031600upgradealreadyrun')) {
-            $DB->execute("
+            $DB->execute(
+                "
                     UPDATE {question_oumultiresponse}
 
                        SET answernumbering = 'none'
@@ -58,7 +58,8 @@ function xmldb_qtype_oumultiresponse_upgrade($oldversion) {
                              WHERE combined.qtype = 'combined'
                                AND child.qtype = 'oumultiresponse'
                            )
-                ");
+                ",
+            );
         }
 
         upgrade_plugin_savepoint(true, 2020031600, 'qtype', 'oumultiresponse');
@@ -68,11 +69,18 @@ function xmldb_qtype_oumultiresponse_upgrade($oldversion) {
     // whether the Standard instruction ('Select one or more:') is displayed.
     $newversion = 2020041600;
     if ($oldversion < $newversion) {
-
         // Define field id to be added to question_oumultiresponse.
         $table = new xmldb_table('question_oumultiresponse');
-        $field = new xmldb_field('showstandardinstruction', XMLDB_TYPE_INTEGER, '2',
-            null, XMLDB_NOTNULL, null, '1', 'shownumcorrect');
+        $field = new xmldb_field(
+            'showstandardinstruction',
+            XMLDB_TYPE_INTEGER,
+            '2',
+            null,
+            XMLDB_NOTNULL,
+            null,
+            '1',
+            'shownumcorrect',
+        );
 
         // Conditionally launch add field id.
         if (!$dbman->field_exists($table, $field)) {

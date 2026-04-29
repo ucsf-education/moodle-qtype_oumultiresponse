@@ -17,9 +17,9 @@
 /**
  * Unit tests for the OU multiple response question type class.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2008 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2008 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace qtype_oumultiresponse;
@@ -40,11 +40,12 @@ require_once($CFG->dirroot . '/question/type/oumultiresponse/questiontype.php');
 /**
  * Unit tests for (some of) question/type/oumultiresponse/questiontype.php.
  *
- * @copyright  2008 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers \qtype_oumultiresponse
+ * @copyright 2008 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers    \qtype_oumultiresponse
  */
-final class questiontype_test extends \question_testcase {
+final class questiontype_test extends \question_testcase
+{
     /**
      * @var qtype_oumultiresponse
      */
@@ -55,6 +56,15 @@ final class questiontype_test extends \question_testcase {
         $this->qtype = new qtype_oumultiresponse();
     }
 
+    /**
+     * Parse an XML string using whichever API is available.
+     *
+     * Uses {@see \core\xml_parser} when present (Moodle 4.5+) and falls back
+     * to the deprecated {@see xmlize()} function on older Moodle versions.
+     *
+     * @param string $xml The XML string to parse.
+     * @return array Parsed XML structure.
+     */
     private function xmlize(string $xml): array {
         if (class_exists(\core\xml_parser::class)) {
             return (new \core\xml_parser())->parse($xml);
@@ -64,8 +74,10 @@ final class questiontype_test extends \question_testcase {
 
     #[\Override]
     public function assert_same_xml($expectedxml, $xml): void {
-        $this->assertEquals(str_replace("\r\n", "\n", $expectedxml),
-                str_replace("\r\n", "\n", $xml));
+        $this->assertEquals(
+            str_replace("\r\n", "\n", $expectedxml),
+            str_replace("\r\n", "\n", $xml),
+        );
     }
 
     public function test_name(): void {
@@ -100,11 +112,14 @@ final class questiontype_test extends \question_testcase {
         ];
         $responses = $this->qtype->get_possible_responses($q);
 
-        $this->assertEquals([
-            1 => [1 => new question_possible_response('frog', 0.5)],
-            2 => [2 => new question_possible_response('toad', 0.5)],
-            3 => [3 => new question_possible_response('newt', 0)],
-        ], $this->qtype->get_possible_responses($q));
+        $this->assertEquals(
+            [
+                1 => [1 => new question_possible_response('frog', 0.5)],
+                2 => [2 => new question_possible_response('toad', 0.5)],
+                3 => [3 => new question_possible_response('newt', 0)],
+            ],
+            $this->qtype->get_possible_responses($q),
+        );
     }
 
     public function test_get_random_guess_score(): void {
@@ -115,16 +130,28 @@ final class questiontype_test extends \question_testcase {
             2 => new question_answer(2, 'B', 0, '', FORMAT_HTML),
             3 => new question_answer(3, 'C', 0, '', FORMAT_HTML),
         ];
-        $this->assertEquals(1 / 3,
-                $this->qtype->get_random_guess_score($questiondata), '', 0.000001);
+        $this->assertEquals(
+            1 / 3,
+            $this->qtype->get_random_guess_score($questiondata),
+            '',
+            0.000001,
+        );
 
         $questiondata->options->answers[2]->fraction = 1;
-        $this->assertEquals(2 / 3,
-                $this->qtype->get_random_guess_score($questiondata), '', 0.000001);
+        $this->assertEquals(
+            2 / 3,
+            $this->qtype->get_random_guess_score($questiondata),
+            '',
+            0.000001,
+        );
 
         $questiondata->options->answers[4] = new question_answer(4, 'D', 0, '', FORMAT_HTML);
-        $this->assertEquals(1 / 2,
-                $this->qtype->get_random_guess_score($questiondata), '', 0.000001);
+        $this->assertEquals(
+            1 / 2,
+            $this->qtype->get_random_guess_score($questiondata),
+            '',
+            0.000001,
+        );
     }
 
     public function test_xml_import(): void {
@@ -192,7 +219,11 @@ final class questiontype_test extends \question_testcase {
 
         $importer = new \qformat_xml();
         $q = $importer->try_importing_using_qtypes(
-                $xmldata['question'], null, null, 'oumultiresponse');
+            $xmldata['question'],
+            null,
+            null,
+            'oumultiresponse',
+        );
 
         $expectedq = new \stdClass();
         $expectedq->qtype = 'oumultiresponse';
@@ -256,8 +287,8 @@ final class questiontype_test extends \question_testcase {
       <text>008 OUMR feedback test</text>
     </name>
     <questiontext format="html">
-      <text>&lt;p&gt;OUMR question.&lt;/p&gt; &lt;p&gt;Right answers are eighta ' .
-                'and eightb.&lt;/p&gt;</text>
+      <text>&lt;p&gt;OUMR question.&lt;/p&gt; &lt;p&gt;Right answers are eighta '
+                . 'and eightb.&lt;/p&gt;</text>
     </questiontext>
     <image></image>
     <generalfeedback>
@@ -329,13 +360,17 @@ final class questiontype_test extends \question_testcase {
 
         $importer = new \qformat_xml();
         $q = $importer->try_importing_using_qtypes(
-                $xmldata['question'], null, null, 'oumultiresponse');
+            $xmldata['question'],
+            null,
+            null,
+            'oumultiresponse',
+        );
 
         $expectedq = new \stdClass();
         $expectedq->qtype = 'oumultiresponse';
         $expectedq->name = '008 OUMR feedback test';
-        $expectedq->questiontext = '<p>OUMR question.</p><p>Right answers are ' .
-                'eighta and eightb.</p>';
+        $expectedq->questiontext = '<p>OUMR question.</p><p>Right answers are '
+                . 'eighta and eightb.</p>';
         $expectedq->questiontextformat = FORMAT_HTML;
         $expectedq->generalfeedback = 'General feedback.';
         $expectedq->generalfeedbackformat = FORMAT_HTML;

@@ -19,12 +19,12 @@ namespace qtype_oumultiresponse\output;
 /**
  * Mobile output class for question type oumultiresponse.
  *
- * @package qtype_oumultiresponse
+ * @package   qtype_oumultiresponse
  * @copyright 2018 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mobile {
-
+class mobile
+{
     /**
      * Returns the mobile output for the oumultiresponse question type.
      */

@@ -17,19 +17,19 @@
 /**
  * Test helper code for the OU multiple response question type.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2010 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2010 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
  * Test helper class for the OU multiple response question type.
  *
- * @copyright  2010 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2010 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_oumultiresponse_test_helper {
-
+class qtype_oumultiresponse_test_helper
+{
     /**
      * Get test question function.
      *
@@ -80,6 +80,7 @@ class qtype_oumultiresponse_test_helper {
     /**
      * Get the question data, as it would be loaded by get_question_options, for
      * the question returned by {@link make_an_oumultiresponse_two_of_four()}.
+     *
      * @return object
      */
     public static function get_oumultiresponse_question_data_two_of_four() {
@@ -112,15 +113,15 @@ class qtype_oumultiresponse_test_helper {
         $qdata->options->shuffleanswers = 1;
         $qdata->options->answernumbering = '123';
         $qdata->options->showstandardinstruction = 0;
-        $qdata->options->correctfeedback =
-                test_question_maker::STANDARD_OVERALL_CORRECT_FEEDBACK;
+        $qdata->options->correctfeedback
+                = test_question_maker::STANDARD_OVERALL_CORRECT_FEEDBACK;
         $qdata->options->correctfeedbackformat = FORMAT_HTML;
-        $qdata->options->partiallycorrectfeedback =
-                test_question_maker::STANDARD_OVERALL_PARTIALLYCORRECT_FEEDBACK;
+        $qdata->options->partiallycorrectfeedback
+                = test_question_maker::STANDARD_OVERALL_PARTIALLYCORRECT_FEEDBACK;
         $qdata->options->partiallycorrectfeedbackformat = FORMAT_HTML;
         $qdata->options->shownumcorrect = 1;
-        $qdata->options->incorrectfeedback =
-                test_question_maker::STANDARD_OVERALL_INCORRECT_FEEDBACK;
+        $qdata->options->incorrectfeedback
+                = test_question_maker::STANDARD_OVERALL_INCORRECT_FEEDBACK;
         $qdata->options->incorrectfeedbackformat = FORMAT_HTML;
 
         $qdata->options->answers = [

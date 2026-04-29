@@ -17,9 +17,9 @@
 /**
  * Mobile plugin.
  *
- * @package qtype_oumultiresponse
+ * @package   qtype_oumultiresponse
  * @copyright 2018 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();

@@ -1,7 +1,7 @@
 var that = this;
 var result = {
 
-    componentInit: function() {
+    componentInit: function () {
 
         // This.question should be provided to us here.
         // This.question.html (string) is the main source of data, presumably prepared by the renderer.
@@ -41,16 +41,18 @@ var result = {
 
         var options = [];
         var divs = answeroptions.querySelectorAll('div[class^=r]'); // Only get the answer options divs (class="r0...").
-        divs.forEach(function(d, i) {
-            // Each answer option contains all the data for presentation, it just needs extracting.
-            var label = d.querySelector('label').innerHTML;
-            var name = d.querySelector('label').getAttribute('for');
-            var checked = (d.querySelector('input[type=checkbox]').getAttribute('checked') ? true : false);
-            var disabled = (d.querySelector('input').getAttribute('disabled') === 'disabled' ? true : false);
-            var feedback = (d.querySelector('div') ? d.querySelector('div').innerHTML : '');
-            var qclass = d.getAttribute('class');
-            options.push({text: label, name: name, checked: checked, disabled: disabled, feedback: feedback, qclass: qclass});
-        });
+        divs.forEach(
+            function (d, i) {
+                // Each answer option contains all the data for presentation, it just needs extracting.
+                var label = d.querySelector('label').innerHTML;
+                var name = d.querySelector('label').getAttribute('for');
+                var checked = (d.querySelector('input[type=checkbox]').getAttribute('checked') ? true : false);
+                var disabled = (d.querySelector('input').getAttribute('disabled') === 'disabled' ? true : false);
+                var feedback = (d.querySelector('div') ? d.querySelector('div').innerHTML : '');
+                var qclass = d.getAttribute('class');
+                options.push({text: label, name: name, checked: checked, disabled: disabled, feedback: feedback, qclass: qclass});
+            }
+        );
         this.question.options = options;
 
         return true;

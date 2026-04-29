@@ -17,41 +17,75 @@
 /**
  * Editing form for the OU multiple response question type class.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2008 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2008 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
  * Editing form for the oumultiresponse question type.
  *
- * @copyright  2008 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2008 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_oumultiresponse_edit_form extends question_edit_form {
-
+class qtype_oumultiresponse_edit_form extends question_edit_form
+{
     #[\Override]
     protected function definition_inner($mform) {
-        $mform->addElement('advcheckbox', 'shuffleanswers',
-                get_string('shuffleanswers', 'qtype_multichoice'), null, null, [0, 1]);
+        $mform->addElement(
+            'advcheckbox',
+            'shuffleanswers',
+            get_string('shuffleanswers', 'qtype_multichoice'),
+            null,
+            null,
+            [0, 1],
+        );
         $mform->addHelpButton('shuffleanswers', 'shuffleanswers', 'qtype_multichoice');
-        $mform->setDefault('shuffleanswers', $this->get_default_value('shuffleanswers',
-                get_config('qtype_multichoice', 'shuffleanswers')));
+        $mform->setDefault(
+            'shuffleanswers',
+            $this->get_default_value(
+                'shuffleanswers',
+                get_config('qtype_multichoice', 'shuffleanswers'),
+            ),
+        );
 
-        $mform->addElement('select', 'answernumbering',
-                get_string('answernumbering', 'qtype_multichoice'),
-                qtype_multichoice::get_numbering_styles());
-        $mform->setDefault('answernumbering', $this->get_default_value('answernumbering',
-                get_config('qtype_multichoice', 'answernumbering')));
+        $mform->addElement(
+            'select',
+            'answernumbering',
+            get_string('answernumbering', 'qtype_multichoice'),
+            qtype_multichoice::get_numbering_styles(),
+        );
+        $mform->setDefault(
+            'answernumbering',
+            $this->get_default_value(
+                'answernumbering',
+                get_config('qtype_multichoice', 'answernumbering'),
+            ),
+        );
 
-        $mform->addElement('selectyesno', 'showstandardinstruction',
-            get_string('showstandardinstruction', 'qtype_oumultiresponse'), null, null, [0, 1]);
+        $mform->addElement(
+            'selectyesno',
+            'showstandardinstruction',
+            get_string('showstandardinstruction', 'qtype_oumultiresponse'),
+            null,
+            null,
+            [0, 1],
+        );
         $mform->addHelpButton('showstandardinstruction', 'showstandardinstruction', 'qtype_oumultiresponse');
-        $mform->setDefault('showstandardinstruction', $this->get_default_value('showstandardinstruction',
-                get_config('qtype_multichoice', 'showstandardinstruction')));
+        $mform->setDefault(
+            'showstandardinstruction',
+            $this->get_default_value(
+                'showstandardinstruction',
+                get_config('qtype_multichoice', 'showstandardinstruction'),
+            ),
+        );
 
-        $this->add_per_answer_fields($mform, get_string('choiceno', 'qtype_multichoice', '{no}'),
-                null, max(5, QUESTION_NUMANS_START));
+        $this->add_per_answer_fields(
+            $mform,
+            get_string('choiceno', 'qtype_multichoice', '{no}'),
+            null,
+            max(5, QUESTION_NUMANS_START),
+        );
 
         $this->add_combined_feedback_fields(true);
 
@@ -59,15 +93,33 @@ class qtype_oumultiresponse_edit_form extends question_edit_form {
     }
 
     #[\Override]
-    protected function get_per_answer_fields($mform, $label, $gradeoptions,
-            &$repeatedoptions, &$answersoption) {
+    protected function get_per_answer_fields(
+        $mform,
+        $label,
+        $gradeoptions,
+        &$repeatedoptions,
+        &$answersoption,
+    ) {
         $repeated = [];
-        $repeated[] = $mform->createElement('editor', 'answer',
-                $label, ['rows' => 2], $this->editoroptions);
-        $repeated[] = $mform->createElement('checkbox', 'correctanswer',
-                get_string('correctanswer', 'qtype_oumultiresponse'));
-        $repeated[] = $mform->createElement('editor', 'feedback',
-                get_string('feedback', 'question'), ['rows' => 2], $this->editoroptions);
+        $repeated[] = $mform->createElement(
+            'editor',
+            'answer',
+            $label,
+            ['rows' => 2],
+            $this->editoroptions,
+        );
+        $repeated[] = $mform->createElement(
+            'checkbox',
+            'correctanswer',
+            get_string('correctanswer', 'qtype_oumultiresponse'),
+        );
+        $repeated[] = $mform->createElement(
+            'editor',
+            'feedback',
+            get_string('feedback', 'question'),
+            ['rows' => 2],
+            $this->editoroptions,
+        );
 
         // These are returned by arguments passed by reference.
         $repeatedoptions['answer']['type'] = PARAM_RAW;
@@ -78,8 +130,10 @@ class qtype_oumultiresponse_edit_form extends question_edit_form {
 
     #[\Override]
     protected function get_hint_fields($withclearwrong = false, $withshownumpartscorrect = false) {
-        list($repeated, $repeatedoptions) = parent::get_hint_fields(
-                $withclearwrong, $withshownumpartscorrect);
+        [$repeated, $repeatedoptions] = parent::get_hint_fields(
+            $withclearwrong,
+            $withshownumpartscorrect,
+        );
 
         // Add the new option the the last group in repeat if there is one, otherwise
         // as a new element.
@@ -90,8 +144,12 @@ class qtype_oumultiresponse_edit_form extends question_edit_form {
             }
         }
 
-        $showchoicefeedback = $this->_form->createElement('advcheckbox', 'hintshowchoicefeedback', '',
-                get_string('showeachanswerfeedback', 'qtype_oumultiresponse'));
+        $showchoicefeedback = $this->_form->createElement(
+            'advcheckbox',
+            'hintshowchoicefeedback',
+            '',
+            get_string('showeachanswerfeedback', 'qtype_oumultiresponse'),
+        );
         if ($lastgroup) {
             $lastgroup->_elements[] = $showchoicefeedback;
         } else {

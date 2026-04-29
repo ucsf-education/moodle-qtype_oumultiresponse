@@ -17,9 +17,9 @@
 /**
  * Utility functions for the oumultiresponse question type.
  *
- * @package qtype_oumultiresponse
+ * @package   qtype_oumultiresponse
  * @copyright 2025 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace qtype_oumultiresponse;
@@ -27,18 +27,24 @@ namespace qtype_oumultiresponse;
 /**
  * Class that holds utility functions used by the oumultiresponse question type.
  *
- * @package qtype_oumultiresponse
+ * @package   qtype_oumultiresponse
  * @copyright 2025 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class utils {
-
-    /** @var string - Less than operator */
-    const OP_LT = "<";
-    /** @var string - equal operator */
-    const OP_E = "=";
-    /** @var string - greater than operator */
-    const OP_GT = ">";
+class utils
+{
+    /**
+     * @var string - Less than operator
+     */
+    public const OP_LT = "<";
+    /**
+     * @var string - equal operator
+     */
+    public const OP_E = "=";
+    /**
+     * @var string - greater than operator
+     */
+    public const OP_GT = ">";
 
     /**
      * Conveniently compare the current moodle version to a provided version in branch format. This function will
@@ -57,20 +63,20 @@ class utils {
      * $CFG->release = "3.11+ (Build: 20210604)", ...
      * $CFG->version = "2021051700.04", ...
      *
-     * @param string $operator for the comparison
-     * @param string $version to compare to
+     * @param  string $operator for the comparison
+     * @param  string $version  to compare to
      * @return boolean
      */
     public static function moodle_version_is(string $operator, string $version): bool {
         global $CFG;
 
         if (strlen($version) == 2) {
-            $version = $version[0]."0".$version[1];
+            $version = $version[0] . "0" . $version[1];
         }
 
         $current = $CFG->branch;
         if (strlen($current) == 2) {
-            $current = $current[0]."0".$current[1];
+            $current = $current[0] . "0" . $current[1];
         }
 
         $from = intval($current);
@@ -95,7 +101,7 @@ class utils {
                     }
                     break;
                 default:
-                    throw new \coding_exception('invalid operator '.$op);
+                    throw new \coding_exception('invalid operator ' . $op);
             }
         }
 

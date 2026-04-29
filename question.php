@@ -17,9 +17,9 @@
 /**
  * OU multiple response question definition class.
  *
- * @package    qtype_oumultiresponse
- * @copyright  2010 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_oumultiresponse
+ * @copyright 2010 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
@@ -31,12 +31,12 @@ require_once($CFG->dirroot . '/question/type/multichoice/question.php');
 /**
  * Represents an OU multiple response question.
  *
- * @copyright  2010 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2010 The Open University
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
-        implements question_automatically_gradable_with_countback {
-
+class qtype_oumultiresponse_question extends qtype_multichoice_multi_question implements
+    question_automatically_gradable_with_countback
+{
     /**
      * @var int standard instruction to be displayed if enabled.
      */
@@ -45,7 +45,7 @@ class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
     /**
      *  Set renderer for ou multiple response
      *
-     * @param moodle_page $page
+     * @param  moodle_page $page
      * @return renderer_base
      */
     public function get_renderer(moodle_page $page) {
@@ -56,7 +56,10 @@ class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
     public function make_behaviour(question_attempt $qa, $preferredbehaviour) {
         if ($preferredbehaviour == 'interactive') {
             return question_engine::make_behaviour(
-                    'interactivecountback', $qa, $preferredbehaviour);
+                'interactivecountback',
+                $qa,
+                $preferredbehaviour,
+            );
         }
         return question_engine::make_archetypal_behaviour($preferredbehaviour, $qa);
     }
@@ -73,7 +76,7 @@ class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
 
     #[\Override]
     public function grade_response(array $response) {
-        list($numright, $total) = $this->get_num_parts_right($response);
+        [$numright, $total] = $this->get_num_parts_right($response);
         $numwrong = $this->get_num_selected_choices($response) - $numright;
         $numcorrect = $this->get_num_correct_choices();
 
@@ -89,7 +92,8 @@ class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
 
     #[\Override]
     protected function disable_hint_settings_when_too_many_selected(
-            question_hint_with_parts $hint) {
+        question_hint_with_parts $hint,
+    ) {
         parent::disable_hint_settings_when_too_many_selected($hint);
         $hint->showchoicefeedback = false;
     }
@@ -109,31 +113,43 @@ class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
             }
         }
 
-        return self::grade_computation($responsehistories, $this->answers,
-                $this->penalty, $totaltries);
+        return self::grade_computation(
+            $responsehistories,
+            $this->answers,
+            $this->penalty,
+            $totaltries,
+        );
     }
 
     /**
      * Implement the scoring rules.
      *
-     * @param array $responsehistory an array $answerid -> string of 1s and 0s.
-     *      The 1s and 0s are the history of which tries this answer was selected
-     *      on, so 011 means not selected on the first try, then selected on the
-     *      second and third tries. All the strings must be the same length.
-     * @param array $answers $question->options->answers, that is an array
-     *      $answerid => $answer, where $answer->fraction is 0 or 1. The key fields are
+     * @param  array $responsehistory an array $answerid -> string of 1s and 0s.
+     *                                The 1s and 0s are the history of which tries this answer was selected
+     *                                on, so 011 means not selected on the first try, then selected on the
+     *                                second and third tries. All the strings must be the same length.
+     * @param  array $answers         $question->options->answers, that is an array
+     *                                $answerid => $answer, where $answer->fraction
+     *                                is 0 or 1. The key fields are
      * @return float the score.
      */
-    public static function grade_computation($responsehistory, $answers,
-            $penalty, $questionnumtries) {
+    public static function grade_computation(
+        $responsehistory,
+        $answers,
+        $penalty,
+        $questionnumtries,
+    ) {
         // First we reverse the strings to get the most recent responses to the start, then
         // distinguish right and wrong by replacing 1 with 2 for right answers.
         $workspace = [];
         $numright = 0;
         foreach ($responsehistory as $id => $string) {
             $workspace[$id] = strrev($string);
-            if (!question_state::graded_state_for_fraction(
-                    $answers[$id]->fraction)->is_incorrect()) {
+            if (
+                !question_state::graded_state_for_fraction(
+                    $answers[$id]->fraction,
+                )->is_incorrect()
+            ) {
                 $workspace[$id] = str_replace('1', '2', $workspace[$id]);
                 $numright++;
             }
@@ -191,8 +207,8 @@ class qtype_oumultiresponse_question extends qtype_multichoice_multi_question
     /**
      * Replace a character at a given position.
      *
-     * @param string $string The string to modify.
-     * @param int $pos The position of the character to replace (0-based).
+     * @param string $string  The string to modify.
+     * @param int    $pos     The position of the character to replace (0-based).
      * @param string $newchar The new character to insert.
      */
     public static function replace_char_at($string, $pos, $newchar) {
